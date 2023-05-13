@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        th, td {
+            /* width: max-content; */
+            padding: 10px 20px;
+            border:1px solid black;
+        }
+        body {
+            gap: "50px";
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <button onclick="handleAPICall()">Make API call</button>
+
+    <h1>POSTS</h1>
+    <div id = "posts" 
+        style = "
+            max-height: 33vh;
+            overflow: auto;
+        "
+    >
+    </div>
+
+    <h1>PRODUCTS</h1>
+    <div id = "products"
+        style = "
+            max-height: 33vh;
+            overflow: auto;
+        "
+    >
+    </div>
+
+    <h1>TODOS</h1>
+    <div id = "todos"
+    style = "
+    max-height: 33vh;
+    overflow: auto;
+"
+    >
+    </div>
+
+    <!-- <div>
+        <table>
+            <tr>
+                <th>Head</th>
+                <th>Head</th>
+                <th>Head</th>
+            </tr>
+            <tr>
+                <td>THis is it I am not the one</td>
+                <td>THis is it</td>
+                <td>THis is it</td>
+
+            </tr>
+        </table>
+    </div> -->
+</body>
+<script>
+    const postsDiv = document.getElementById("posts")
+    const productsDiv = document.getElementById("products")
+    const todosDiv = document.getElementById("todos")
+
+    let posts = []
+    let products = []
+    let todos = []
+
+    //  First API call
+    async function PromisAPI1(){
+        const response = await fetch("https://dummyjson.com/posts");
+        const jsonData = await response.json();
+        posts = await jsonData.posts
+        console.log("POST 1",posts);
+        return posts
+    }
+
+    // Second APII call
+    async function PromisAPI2(){
+        const response = await fetch("https://dummyjson.com/products");
+        const jsonData = await response.json();
+        products = jsonData.products
+        console.log(products);
+        return products
+    }
+    // Third API Call
+    async function PromisAPI3(){
+        const response = await fetch("https://dummyjson.com/todos");
+        const jsonData = await response.json();
+        todos = jsonData.todos
+        console.log(todos);
+        return todos
+    }
+
+    // Onclik Make all the 3 API call
+    async function handleAPICall() {
+
+        // First API Call
+        await PromisAPI1();
+
+        const table = document.createElement('table')
+        const tr = document.createElement('tr')
+        table.appendChild(tr)
+        const id = document.createElement('th')
+        id.innerText = "Id"
+        tr.appendChild(id)
+        const title = document.createElement("th")
+        title.innerText= " Title"
+        tr.appendChild(title)
+        const body = document.createElement('th')
+        body.innerText = "Body"
+        tr.appendChild(body)
+        const react = document.createElement("th")
+        react.innerText = "Reactions"
+        tr.appendChild(react)
+
+        postsDiv.appendChild(table)
+
+        for (let i = 0; i < posts.length; i++) {
+            const tr = document.createElement('tr')
+            table.appendChild(tr)
+            const id = document.createElement('td')
+            id.innerText = posts[i].id
+            tr.appendChild(id)
+            const title = document.createElement("td")
+            title.innerText= posts[i].title
+            tr.appendChild(title)
+            const body = document.createElement('td')
+            body.innerText = posts[i].body
+            tr.appendChild(body)
+            const react = document.createElement("td")
+            react.innerText = posts[i].reactions
+            tr.appendChild(react)
+
+            postsDiv.appendChild(table)
+        }
+
+        // Second API call
+        await PromisAPI2(); 
+        const table2 = document.createElement('table')
+
+        function productsTable(id, brand, category, description, discount, price, rating, stock, title, col) {
+            const tr = document.createElement("tr")
+            table2.appendChild(tr)
+
+            const idTh = document.createElement(col)
+            idTh.innerText = id
+            tr.appendChild(idTh)
+
+            const brandTh = document.createElement(col)
+            brandTh.innerText = brand
+            tr.appendChild(brandTh)
+
+            const categoryTh = document.createElement(col)
+            categoryTh.innerText = category
+            tr.appendChild(categoryTh)
+
+            const descriptionTh = document.createElement(col)
+            descriptionTh.innerText = description
+            tr.appendChild(descriptionTh)
+
+            const discountTh = document.createElement(col)
+            discountTh.innerText = discount
+            tr.appendChild(discountTh)
+
+            const priceTh = document.createElement(col)
+            priceTh.innerText = price
+            tr.appendChild(priceTh)
+
+            const ratingTh = document.createElement(col)
+            ratingTh.innerText = rating
+            tr.appendChild(ratingTh)
+
+            const stockTh = document.createElement(col)
+            stockTh.innerText = stock
+            tr.appendChild(stockTh)
+
+            const titleTh = document.createElement(col)
+            titleTh.innerText = title
+            tr.appendChild(titleTh)
+
+            
+        }
+
+        productsTable("ID", "Brand", "Category", "Description", "Discount", "Price", "Rating", "Stock", "Title", "th")
+        productsDiv.appendChild(table2)
+
+        for (let i = 0; i < products.length; i++) {
+            productsTable(products[i].id, products[i].brand, products[i].category, products[i].description, products[i].discount, products[i].price, products[i].rating, products[i].stock, products[i].title, "td")
+            productsDiv.appendChild(table2)
+        }
+
+        // Third API call
+       await PromisAPI3();
+       function todosTable(id, todo, completed, col) {
+            const tr = document.createElement("tr")
+            table3.appendChild(tr)
+
+            const idTh = document.createElement(col)
+            idTh.innerText = id
+            tr.appendChild(idTh)
+
+            const todoTh = document.createElement(col)
+            todoTh.innerText = todo
+            tr.appendChild(todoTh)
+
+            const completedTh = document.createElement(col)
+            completedTh.innerText = completed
+            tr.appendChild(completedTh)  
+        }
+
+        const table3 = document.createElement("table")
+        todosTable("ID", "TODO", "COMPLETED", "th")
+
+        for (let i = 0; i < todos.length; i++) {
+            todosTable(todos[i].id, todos[i].todo, todos[i].completed, "td")
+            todosDiv.appendChild(table3)
+        }
+
+    }
+</script>
+</html>
